@@ -6,12 +6,15 @@ pipeline {
             agent {
                 docker {
                     image 'snakee/golang-junit:1.21'
-                    reuseNode true   
+                    reuseNode true
                 }
             }
             steps {
-                dir('bugtracker-backend'){
-                    sh 'go test -v ./...'
+                dir('bugtracker-backend') {
+                    sh '''
+                         export GOCACHE=/tmp/go-cache
+                         go test -v ./...
+                    '''
                 }
             }
         }
