@@ -23,5 +23,27 @@ pipeline {
                 }
             }
         }
+
+        stage('Unit Tests - Frontend') {
+            agent {
+                docker {
+                    image 'node:20-alpine'
+                    args '-u root'
+                    reuseNode true
+                }
+            }
+            steps {
+                dir('bugtracker-frontend') {
+                    sh '''
+                        export GOCACHE=/tmp/go-cache
+                        export GOMODCACHE=/tmp/go-mod-cache
+
+                        mkdir -p $GOCACHE $GOMODCACHE
+                        npm ci
+                        npm test
+                    '''
+                }
+            }
+                }
     }
 }
